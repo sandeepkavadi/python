@@ -5,7 +5,7 @@ git status
 
 git add .
 
-git commit -m "Initial commint"
+git commit -m "Initial commit"
 
 git remote origin git_hub_url.git
 
