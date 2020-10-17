@@ -1,0 +1,13 @@
+Initialization in a repository
+git init
+
+git status
+
+git add .
+
+git commit -m "Initial commint"
+
+git remote origin git_hub_url.git
+
+git push origin master
+
