@@ -9,6 +9,11 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
+
+#An object oriented approach to modeling a perceptron algorithmsimilar to the 
+#exmplae in Ch02 of Python Machine Learning by S. Raschka
+
+
 class Perceptron(object):
     """Creating a class of perceptrons (linear classifiers)
     The labels have to b either +1 or -1
@@ -65,9 +70,9 @@ class Perceptron(object):
             error = 0
             for xi, label in zip(X,y):
                 delta_w = self.eta * (label - self.predict(xi))
+                error += np.where(label == self.predict(xi), 0, 1)
                 self.w[1:] += delta_w * xi #updating the weights
                 self.w[0] += delta_w
-                error += int(delta_w != 0.0)
             self.errors.append(error)
         return self
 
@@ -82,7 +87,7 @@ class Perceptron(object):
         return np.where(self.raw_prod(X) >= 0.0, 1, -1)
    
 #-------------------------------------------------------------------                
-#Example of implementing a perceptronon the iris dataset
+#Example of implementing a perceptronon on the iris dataset
 
 df = pd.read_csv('https://archive.ics.uci.edu/ml/'
     'machine-learning-databases/iris/iris.data', header=None, 
@@ -111,10 +116,53 @@ plt.ylabel('Number of updates')
 
 plt.show()
 
+y_actual = y
+y_pred = slp.predict(X)
+
+df_cm = pd.crosstab(y_actual, y_pred)
+print(df_cm)
+
+
+#-------------------------------------------------------------------                
+#Example 2 Bank churning data set
+
+df2 = pd.read_csv('C:\\Users\\sande\\OneDrive\\Documents\\Self Study\\Data\\BankChurners.csv', header=0)
+
+print(df2.columns)
+
+df2.dtypes
+df2.dtypes.value_counts()
+df2.info()
+
+y2 = df2.iloc[:,1].values
+
+y2 = np.where(y2 =='Existing Customer', -1, 1)
+
+
+X2 = df2.iloc[:,[2,4,9,10,11,12,13,14,15,16,17,18,19,20]].values
+
+slp2 = Perceptron(eta=1, epochs=200, seed=5000)
+
+slp2.fit(X2, y2)
+
+plt.plot(range(1, len(slp2.errors) + 1), slp2.errors)
+plt.xlabel('Epochs')
+plt.ylabel('Number of updates')
+
+plt.show()
+
+print(slp2.w)
+
+from sklearn.metrics import confusion_matrix
+y_actu = y2
+y_pred = slp2.predict(X2)
+
+
+confusion_matrix(y_actu, y_pred)
+df_confusion = pd.crosstab(y_actu, y_pred)
+print(df_confusion)
 
 
 
-        
-    
     
     
